@@ -1,0 +1,1 @@
+<p>{{ $product['id'] }} - {{ $product['name'] }} - {{ $product['price'] }}VND</p>
