@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
         //$middleware->append(CheckTimeAccess::class);
+        $middleware->alias([
+            'check.age' => \App\Http\Middleware\CheckAge::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

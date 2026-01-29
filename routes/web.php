@@ -53,7 +53,19 @@ Route::prefix('auth')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::get('/login', "login")->name('login');
         Route::post('/checkLogin', "checkLogin")->name('checkLogin');
+        
+        Route::get('/signin', "SignIn")->name('auth.signin');
+        Route::post('/check-signin', "CheckSignIn")->name('auth.check_signin');
+
+        Route::get('/input-age', "InputAge")->name('auth.input_age');
+        Route::post('/check-age', "PostCheckAge")->name('auth.check_age');
     });
+});
+
+Route::middleware(['check.age'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return "Welcome to Admin Dashboard (Age Verified)";
+    })->name('admin.dashboard');
 });
 
 Route::get('/sinhvien/{name?}/{mssv?}', function (
