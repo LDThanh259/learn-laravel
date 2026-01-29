@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\CheckTimeAccess;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,19 +19,33 @@ Route::get('/', function () {
 //     ->name('product.detail');
 // });
 
+// Route::prefix('product')->middleware(CheckTimeAccess::class)->group(function () {
+
+//     Route::controller(ProductController::class)->group(function () {
+
+//         Route::get('/',  "index")->name('product.index');
+
+//         Route::get('/add',  "add")->name('product.add');
+
+//         Route::get('/{id?}',  "detail")->where('id', '[A-Za-z0-9]+')
+//             ->name('product.detail');
+
+//         Route::post('/store', "store")->name('product.store');
+//     });
+// });
+
 Route::prefix('product')->group(function () {
 
-    Route::controller(ProductController::class)->group(function(){
+    Route::controller(ProductController::class)->group(function () {
 
         Route::get('/',  "index")->name('product.index');
-    
-        Route::get('/add',  "add")->name('product.add');
-    
+
+        Route::get('/add',  "add")->name('product.add')->middleware(CheckTimeAccess::class);
+
         Route::get('/{id?}',  "detail")->where('id', '[A-Za-z0-9]+')
-        ->name('product.detail');
+            ->name('product.detail');
 
         Route::post('/store', "store")->name('product.store');
-
     });
 });
 
