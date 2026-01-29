@@ -46,6 +46,8 @@ Route::prefix('product')->group(function () {
             ->name('product.detail');
 
         Route::post('/store', "store")->name('product.store');
+        Route::put('/update/{id}', "update")->name('product.update');
+        Route::delete('/delete/{id}', "destroy")->name('product.destroy');
     });
 });
 

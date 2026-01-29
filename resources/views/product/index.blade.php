@@ -5,7 +5,7 @@
 <ul>
     @foreach ($products as $product)
     <li>
-        <a href="{{ route('product.detail', ['id' => $product['id']]) }}">{{ $product['name'] }}</a> - {{ number_format($product['price']) }} VND
+        <a href="{{ route('product.detail', ['id' => $product['id']]) }}">{{ $product['name'] }}</a> - {{ number_format($product['price']) }} VND - {{ number_format($product['stock']) }} sản phẩm
     </li>
     @endforeach
 </ul>
