@@ -18,7 +18,7 @@ class ProductController extends Controller
         $products = Product::All();
         $title = "Product list";
 
-        return view('product.index', compact('products', 'title'));
+        return view('admin.product.index', compact('products', 'title'));
     }
 
     public function detail($id = 123)
@@ -32,22 +32,23 @@ class ProductController extends Controller
             abort(404);
         }
 
-        return view('product.detail', compact('product'));
+        return view('admin.product.detail', compact('product'));
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $product = Product::find($id);
         if (!$product) {
             abort(404);
         }
-        
+
         $product->name = $request->name;
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->save();
 
         return redirect()
-            ->route('product.index')
+            ->route('admin.product.index')
             ->with('success', 'Product updated successfully!');
     }
 
@@ -61,13 +62,13 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()
-            ->route('product.index')
+            ->route('admin.product.index')
             ->with('success', 'Product deleted successfully!');
     }
 
     public function add()
     {
-        return view('product.add');
+        return view('admin.product.add');
     }
 
     public function store(Request $request)
@@ -97,8 +98,7 @@ class ProductController extends Controller
         $product->save();
 
         return redirect()
-            ->route('product.index')
+            ->route('admin.product.index')
             ->with('success', 'Product added successfully!');
     }
 }
-

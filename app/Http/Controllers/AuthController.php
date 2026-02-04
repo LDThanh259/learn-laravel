@@ -3,62 +3,58 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
     public function login()
     {
-        return view('login');
+        return view('auth.login');
     }
 
     public function checkLogin(Request $request)
     {
-        $name = $request->input('name');
-        $mssv = $request->input('mssv');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        if ($name == "thanhld" && $mssv == "0321067") {
-            return redirect()
-                ->route('product.index')
-                ->with('success', 'Login successful!');
-        } else {
-            return "login failed";
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->route('product.index')->with('success', 'Login successful!');
         }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
+
     public function SignIn()
     {
-        return view('signin');
+        return view('auth.signin');
     }
 
     public function CheckSignIn(Request $request)
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
-        $repass = $request->input('repass');
-        $mssv = $request->input('mssv');
-        $lopmonhoc = $request->input('lopmonhoc');
-        $gioitinh = $request->input('gioitinh');
-        // Sample correct info: Hieulx, 123abc, 123abc, 26867, 67PM1, nam
-        $correct_username = "thanhld";
-        $correct_password = "thanhld";
-        $correct_mssv = "0321067";
-        $correct_lopmonhoc = "67PM1";
-        $correct_gioitinh = "nam";
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+            'repass' => 'required|same:password',
+        ]);
 
-        if ($password !== $repass) {
-             return "Đăng ký thất bại: Mật khẩu không trùng khớp";
-        }
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
-        if (
-            $username === $correct_username &&
-            $password === $correct_password &&
-            $mssv === $correct_mssv &&
-            $lopmonhoc === $correct_lopmonhoc &&
-            $gioitinh === $correct_gioitinh
-        ) {
-            return "Đăng ký thành công!";
-        } else {
-             return "Đăng ký thất bại: Thông tin không chính xác";
-        }
+        Auth::login($user);
+
+        return redirect()->route('product.index')->with('success', 'Registration successful!');
     }
     public function InputAge()
     {
