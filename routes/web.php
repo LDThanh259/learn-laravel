@@ -40,7 +40,8 @@ Route::prefix('product')->group(function () {
 
         Route::get('/',  "index")->name('product.index');
 
-        Route::get('/add',  "add")->name('product.add')->middleware(CheckTimeAccess::class);
+        // Route::get('/add',  "add")->name('product.add')->middleware(CheckTimeAccess::class);
+        Route::get('/add',  "add")->name('product.add');
 
         Route::get('/{id?}',  "detail")->where('id', '[A-Za-z0-9]+')
             ->name('product.detail');
@@ -84,3 +85,7 @@ Route::get('/banco/{n?}', function ($n = 8) {
 Route::fallback(function () {
     return response()->view('error.404', [], 404);
 });
+
+Route::get('/admin', function () {
+    return view('layout.admin');
+})->name('admin');
