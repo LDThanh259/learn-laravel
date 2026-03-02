@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\CheckTimeAccess;
 use Illuminate\Support\Facades\Route;
 
@@ -56,7 +57,7 @@ Route::prefix('auth')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::get('/login', "login")->name('login');
         Route::post('/checkLogin', "checkLogin")->name('checkLogin');
-        
+
         Route::get('/signin', "SignIn")->name('auth.signin');
         Route::post('/check-signin', "CheckSignIn")->name('auth.check_signin');
 
@@ -89,3 +90,12 @@ Route::fallback(function () {
 Route::get('/admin', function () {
     return view('layout.admin');
 })->name('admin');
+
+Route::prefix('category')->group(function () {
+    Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+    Route::get('/create', [CategoryController::class, 'create'])->name('category.create');
+    Route::post('/', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::put('/{category}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+});
