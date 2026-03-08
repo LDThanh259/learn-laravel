@@ -56,8 +56,12 @@ class CategoryController extends Controller
         }
 
         $data = $request->all();
+        $data['is_active'] = $request->has('is_active') ? 1 : 0;
+        $data['is_delete'] = 0;
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('categories', 'public');
+        } else {
+            unset($data['image']); // don't overwrite existing image with null
         }
 
         Category::create($data);
@@ -86,8 +90,11 @@ class CategoryController extends Controller
         }
 
         $data = $request->all();
+        $data['is_active'] = $request->has('is_active') ? 1 : 0;
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('categories', 'public');
+        } else {
+            unset($data['image']); // don't overwrite existing image with null
         }
 
         $category->update($data);

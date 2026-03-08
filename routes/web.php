@@ -35,21 +35,15 @@ Route::get('/', function () {
 //     });
 // });
 
-Route::prefix('product')->group(function () {
-
+Route::prefix('admin/product')->group(function () {
     Route::controller(ProductController::class)->group(function () {
-
         Route::get('/',  "index")->name('product.index');
-
-        // Route::get('/add',  "add")->name('product.add')->middleware(CheckTimeAccess::class);
-        Route::get('/add',  "add")->name('product.add');
-
-        Route::get('/{id?}',  "detail")->where('id', '[A-Za-z0-9]+')
-            ->name('product.detail');
-
+        Route::get('/add',  "create")->name('product.add'); // match controller method "create" returning view "add" or just map directly
+        Route::get('/create',  "create")->name('product.create');
         Route::post('/store', "store")->name('product.store');
-        Route::put('/update/{id}', "update")->name('product.update');
-        Route::delete('/delete/{id}', "destroy")->name('product.destroy');
+        Route::get('/{id}/edit',  "edit")->name('product.edit');
+        Route::put('/{id}',  "update")->name('product.update');
+        Route::delete('/{id}',  "destroy")->name('product.destroy');
     });
 });
 
